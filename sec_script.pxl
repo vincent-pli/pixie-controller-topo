@@ -1,0 +1,21 @@
+# Import Pixie's module for querying data
+import px
+
+# Load the last 30 seconds of Pixie's `conn_stats` table into a Dataframe.
+df = px.DataFrame(table='http_events', start_time='-120s')
+df.container_name = px.upid_to_container_name(df.upid)
+
+#df = df[df.remote_addr == '9.30.244.91']
+#df = df[df.remote_port == 443]
+
+df.pod = df.ctx['pod']
+df.service = df.ctx['service']
+
+df = df.drop(['upid'])
+
+df = df[df.pod == 'tekton-pipelines/tekton-pipelines-controller-69d7f997f-92fbr']
+
+#df = df.head(20)
+# Display the DataFrame with table formatting
+px.display(df)
+

@@ -1,0 +1,15 @@
+# Import Pixie's module for querying data
+import px
+
+# Load the last 30 seconds of Pixie's `conn_stats` table into a Dataframe.
+df = px.DataFrame(table='conn_stats', start_time='-120s')
+df.container_name = px.upid_to_container_name(df.upid)
+
+df = df[df.remote_addr == '10.96.0.1']
+df = df[df.remote_port == 443]
+
+df = df.drop(['upid', 'bytes_sent', 'bytes_recv'])
+7
+# Display the DataFrame with table formatting
+px.display(df)
+
